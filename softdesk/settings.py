@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'api',
     'projects',
+    'issues',
 ]
 
 MIDDLEWARE = [
