@@ -1,0 +1,7 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"  # Pour les dépendances Python
+    directory: "/"           # Dossier où se trouve le fichier requirements.txt ou pyproject.toml
+    schedule:
+      interval: "daily"      # Vérifie les mises à jour quotidiennement
+    open-pull-requests-limit: 5
