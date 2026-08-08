@@ -5,6 +5,7 @@ to handle CRUD operations via the Django REST Framework API.
 """
 from rest_framework import viewsets, permissions
 from projects.models import Project, Contributor
+from projects.permissions import IsAuthorOrReadOnly, IsProjectAuthor
 from projects.serializers import ProjectSerializer, ContributorSerializer
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -15,7 +16,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = ProjectSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         """Return only the Project where the user is a contributor."""
@@ -34,7 +35,11 @@ class ContributorViewSet(viewsets.ModelViewSet):
     Only the project author can add/remove contributors.
     """
     serializer_class = ContributorSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        permissions.IsAuthenticated,
+        # Seuls les auteurs du projet peuvent gérer les contributeurs
+        IsProjectAuthor
+    ]
 
     def get_queryset(self):
         """Return only the contributors for projects where the user is the

@@ -7,6 +7,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions
 from users.models import User
 from users.serializers import UserSerializer
+from users.permissions import IsAdminOrSelf
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -26,4 +27,10 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     # Specifies the permission (only admin can list users)
-    permission_classes = [permissions.IsAdminUser]
+    # permission_classes = [permissions.IsAdminUser]
+    permission_classes = [
+        # L'utilisateur doit être authentifié
+        permissions.IsAuthenticated,
+        # Applique la permission personnalisée
+        IsAdminOrSelf,
+    ]

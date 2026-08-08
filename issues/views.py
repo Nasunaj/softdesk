@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from issues.models import Issue, Comment
 from issues.serializers import IssueSerializer, CommentSerializer
 from projects.models import Contributor
+from projects.permissions import IsAuthorOrReadOnly
 
 class IssueViewSet(viewsets.ModelViewSet):
     """ViewSet for the Issue model.
@@ -18,7 +19,12 @@ class IssueViewSet(viewsets.ModelViewSet):
     Only authenticated users who are contributors to the project can create or modify issues.
     """
     serializer_class = IssueSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [
+        # L'utilisateur doit être authentifié
+        permissions.IsAuthenticated,
+        # Applique la permission personnalisée
+        IsAuthorOrReadOnly
+        ]
 
     def get_queryset(self):
         """Return only the issues for projects where the user is a contributor.
@@ -64,7 +70,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     modify issues.
     """
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         """Return only the comments for projects where the user is a
