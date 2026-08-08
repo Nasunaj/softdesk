@@ -85,3 +85,43 @@ class IssueSerializer(serializers.ModelSerializer):
         )
         return issue
 
+    def update(self, instance, validated_data):
+        """
+        Update and return an existing `Issue` instance, given the validated
+        data.
+        """
+
+        # Retrieve the current user
+        request = self.context.get('request')
+        if not request or not hasattr(request, 'user'):
+            raise serializers.ValidationError('Doit être authentifié.')
+
+        user = request.user
+
+        # Check that user is the author of the issue
+        if instance.author.user != user:
+            raise serializers.ValidationError("Seul l'auteur de l'issue peut "
+                                              "la modifier.")
+        # Update allowed fields
+        instance.title = validated_data.get('title', instance.title)
+        instance.description = validated_data.get('description',
+                                                  instance.description)
+        instance.status = validated_data.get('status', instance.status)
+        instance.priority = validated_data.get('priority', instance.priority)
+        instance.tag = validated_data.get('tag', instance.tag)
+        instance.assignee = validated_data.get('assignee', instance.assignee)
+        instance.save()
+        return instance
+
+    def delete(self, instance):
+        """Delete an existing `Issue` instance."""
+        request = self.context.get('request')
+        if not request or not hasattr(request, 'user'):
+            raise serializers.ValidationError("Doit être authentifié.")
+
+        user = request.user
+        # Check that user is the author of the issue
+        if instance.author.user != user:
+            raise serializers.ValidationError("Seul l'auteur de l'issue peut la"
+                                              "supprimer.")
+        instance.delete()

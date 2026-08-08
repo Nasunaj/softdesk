@@ -25,7 +25,17 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
         # Vérifie si l'utilisateur actuel (request.user) est l'auteur de la
         # ressource (obj.author.user). Si oui, il peut modifier ou supprimer
         # la ressource.
-        return obj.author == request.user
+        # return obj.author == request.user
+
+        # Write permissions are only allowed to the author of the object
+        # Gère le cas où obj.author est un Contributor (pour Issue, Comment,
+        # etc.)
+        if hasattr(obj, 'author') and hasattr(obj.author, 'user'):
+            return obj.author.user == request.user
+        # Gère le cas où obj.author est un User (pour Project, etc.)
+        elif hasattr(obj, 'author'):
+            return obj.author == request.user
+        return False
 
 class IsProjectAuthor(permissions.BasePermission):
     """
