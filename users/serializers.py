@@ -8,6 +8,7 @@ from rest_framework import serializers
 from users.models import User
 from django.contrib.auth.password_validation import validate_password
 
+
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for the User model.
 
@@ -22,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         # Liste des champs à inclure dans la sérialisation
         fields = ['id', 'username', 'email', 'age', 'can_be_contacted',
-                  'can_data_be_shared','password']
+                  'can_data_be_shared', 'password']
         # password : nécessaire pour la création/modification
 
         # Champs en lecture seule (ne peuvent pas être modifiés via l'API)
@@ -65,6 +66,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
+
 class SignupSerializer(serializers.ModelSerializer):
     """Serializer for user Signup."""
 
@@ -99,7 +101,7 @@ class SignupSerializer(serializers.ModelSerializer):
         validated_data.pop('password2')
         user = User.objects.create_user(
             username=validated_data['username'],
-            email=validated_data.get('email',""),
+            email=validated_data.get('email', ""),
             password=password,
             age=validated_data['age'],
             can_be_contacted=validated_data.get('can_be_contacted', False),

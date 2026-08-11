@@ -3,15 +3,14 @@
 This module defines the views for the User model to handle CRUD operation via
 the Django REST Framework. API
 """
-from django.shortcuts import render
+
 from rest_framework import viewsets, permissions, generics
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.views import APIView
-
 from users.models import User
 from users.serializers import UserSerializer, SignupSerializer
 from users.permissions import IsAdminOrSelf
+
 
 # Create your views here.
 class UserViewSet(viewsets.ModelViewSet):
@@ -39,6 +38,7 @@ class UserViewSet(viewsets.ModelViewSet):
         IsAdminOrSelf,
     ]
 
+
 class SignupView(generics.CreateAPIView):
     """
     View for user signup.
@@ -62,6 +62,5 @@ class SignupView(generics.CreateAPIView):
             'user_id': user.id,
             'username': user.username,
             'email': user.email,
-        },
-        status=status.HTTP_201_CREATED
+        }, status=status.HTTP_201_CREATED
         )

@@ -2,6 +2,7 @@
 
 from rest_framework import permissions
 
+
 class IsAdminOrSelf(permissions.BasePermission):
     """
     Custom permission to only allow :

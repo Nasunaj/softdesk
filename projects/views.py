@@ -8,6 +8,7 @@ from projects.models import Project, Contributor
 from projects.permissions import IsAuthorOrReadOnly, IsProjectAuthor
 from projects.serializers import ProjectSerializer, ContributorSerializer
 
+
 class ProjectViewSet(viewsets.ModelViewSet):
     """Viewset for the Project model.
 
@@ -22,11 +23,19 @@ class ProjectViewSet(viewsets.ModelViewSet):
         """Return only the Project where the user is a contributor."""
         user = self.request.user
         # Retrieves the projects where the user is the contributor.
-        return Project.objects.filter(contributors__user=user)
+        # return Project.objects.filter(contributors__user=user)
+        return Project.objects.filter(
+            contributors__user=user
+        ).select_related(
+            'author'
+        ).prefetch_related(
+            'contributors'
+        ).distinct()
 
     def perform_create(self, serializer):
         """Automatically set the author as the current user."""
         serializer.save(author=self.request.user)
+
 
 class ContributorViewSet(viewsets.ModelViewSet):
     """ViewSet for the Contributor model.

@@ -8,6 +8,7 @@ from rest_framework import serializers
 from issues.models import Issue, Comment
 from projects.models import Contributor
 
+
 class CommentSerializer(serializers.ModelSerializer):
     """Serializer for the Comment model."""
     class Meta:
@@ -23,7 +24,8 @@ class CommentSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         """
-        Validation personnalisée pour s'assurer que l'issue existe et que l'utilisateur est un contributeur.
+        Validation personnalisée pour s'assurer que l'issue existe et que
+        l'utilisateur est un contributeur.
         """
         issue = data.get('issue')
         if not issue:
@@ -37,13 +39,16 @@ class CommentSerializer(serializers.ModelSerializer):
 
         return data
 
+
 class IssueSerializer(serializers.ModelSerializer):
     """Serializer for the Issue model.
 
         This serializer includes the comments of the issue.
     """
+
     # Custom field to display issue comments.
-    comments = CommentSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True, required=False)
+
     class Meta:
         """Define the model and fields to serialize."""
         model = Issue
@@ -54,6 +59,16 @@ class IssueSerializer(serializers.ModelSerializer):
             'project': {'required': True},
             'assignee': {'required': False},
         }
+
+    # Méthode est appelée quand le serializer est instancié
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Vérifie si le paramètre ?include=comments est présent dans l'URL.
+        if not (self.context.get('request').query_params.get('include') ==
+                'comments'):
+            # Si ?include=comments n'est pas présent, le champ comments est
+            # retiré du serializer.
+            self.fields.pop('comments', None)
 
     def create(self, validated_data):
         """Create and return a new `Issue` instance, given the validated data.
@@ -122,6 +137,6 @@ class IssueSerializer(serializers.ModelSerializer):
         user = request.user
         # Check that user is the author of the issue
         if instance.author.user != user:
-            raise serializers.ValidationError("Seul l'auteur de l'issue peut la"
-                                              "supprimer.")
+            raise serializers.ValidationError("Seul l'auteur de l'issue peut "
+                                              "la supprimer.")
         instance.delete()

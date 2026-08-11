@@ -7,6 +7,7 @@ to enable CRUD operations via the Django REST Framework API.
 from rest_framework import serializers
 from projects.models import Project, Contributor
 
+
 class ContributorSerializer(serializers.ModelSerializer):
     """Serializer for the Contributor model."""
     class Meta:
@@ -18,6 +19,7 @@ class ContributorSerializer(serializers.ModelSerializer):
             'user': {'required': True},
             'project': {'required': True},
         }
+
 
 class ProjectSerializer(serializers.ModelSerializer):
     """Serializer for the Project model.

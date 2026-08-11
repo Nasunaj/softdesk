@@ -6,6 +6,7 @@ application.
 from django.db import models
 from users.models import User
 
+
 class Project(models.Model):
     """ model representing a project in softdesk.
 
@@ -34,6 +35,7 @@ class Project(models.Model):
     def __str__(self):
         """Return a string representation of the project."""
         return f"{self.name} ({self.type})"
+
 
 class Contributor(models.Model):
     """Model representing a contributor to a project.

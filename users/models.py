@@ -8,6 +8,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 
+
 class User(AbstractUser):
     """User model."""
     # Additional field for RGPD

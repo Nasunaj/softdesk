@@ -1,0 +1,10 @@
+[flake8]
+extend-select = D
+exclude =
+    */migrations/*,
+    */__pycache__/*,
+    *.pyc,
+    .venv/,
+    venv/,
+    softdesk/settings.py,
+

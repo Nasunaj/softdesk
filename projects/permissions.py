@@ -37,6 +37,7 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             return obj.author == request.user
         return False
 
+
 class IsProjectAuthor(permissions.BasePermission):
     """
     Custom permission to only allow authors to edit the project author to add/
@@ -45,7 +46,7 @@ class IsProjectAuthor(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        # - Cette méthode est appelée avant que l'object ne soit récupéré ( pour
+        # - Cette méthode est appelée avant que l'object ne soit récupéré (pour
         # les  requêtes POST, PUT, PATCH, DELETE)
         # - Pour une requête POST /api/contributors/ (ajout d'un contributeur):
         # -- On récupère l'id du projet depuis request.data

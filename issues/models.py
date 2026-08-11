@@ -5,6 +5,7 @@ This module defines the Issue and Comment models for the SoftDesk application.
 from django.db import models
 from projects.models import Project, Contributor
 
+
 class Issue (models.Model):
     """Model representing an Issue(task, bug or feature) in a project.
     Attributes:
@@ -59,6 +60,7 @@ class Issue (models.Model):
         """Return a string representation of the Issue model."""
         return f"{self.title} ({self.status}) in {self.project.name}"
 
+
 class Comment (models.Model):
     """Model  representing a comment on an issue.
 
@@ -77,6 +79,7 @@ class Comment (models.Model):
                                related_name='created_comments')
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_time = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         """Return a string representation of the Issue model."""
         return f"Comment by {self.author.user.username} on {self.issue.title}"

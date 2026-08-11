@@ -8,11 +8,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from users.models import User
 
+
 class CustomUserAdmin(UserAdmin):
     """Custom class to manage the display of the User model in Django admin.
 
     This class extends UserAdmin to:
-    - display the username, email, age, 'can_be_contacted', 'can_data_be_shared'
+    - display the username, email, age, 'can_be_contacted',
+    'can_data_be_shared'
     - Allow filtering user by 'can_be_contacted', 'can_data_be_shared'
     - Include RGPD fields in the creation and modification forms
     """
@@ -39,6 +41,7 @@ class CustomUserAdmin(UserAdmin):
                        'can_be_contacted', 'can_data_be_shared'),
         }),
     )
+
 
 # Enregistre le modèle User avec la classe personnalisée
 admin.site.register(User, CustomUserAdmin)
