@@ -18,7 +18,7 @@ pipenv install
 ```
 
 #### 3. Activate the virtual environment
-- **On Windows**:
+
   ```bash
   pipenv shell
   ```
@@ -161,7 +161,9 @@ Authorization: Bearer your_access_token
 | /api/comments/{id}/ | DELETE    | Delete a comment | Comment Author only |
 ---
 ## Testing the API
-Postman or CURL can be used for example to test the API.
+
+Postman or CURL can be used for example to test the API
+
 ---
 ## Green Code & Optimisation
 - Pagination : all endpoints support pagination (10 items per page).
