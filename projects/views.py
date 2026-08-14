@@ -20,17 +20,32 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated, IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        """Return only the Project where the user is a contributor."""
+        """Return all projects if user is admin, otherwise only user's
+        projects."""
         user = self.request.user
-        # Retrieves the projects where the user is the contributor.
-        # return Project.objects.filter(contributors__user=user)
-        return Project.objects.filter(
-            contributors__user=user
-        ).select_related(
-            'author'
-        ).prefetch_related(
-            'contributors'
-        ).distinct()
+        if user.is_staff:
+            return (Project.objects.all().select_related('author').
+                    prefetch_related('contributors'))
+        else:
+            return Project.objects.filter(
+                contributors__user=user
+            ).select_related(
+                'author'
+            ).prefetch_related(
+                'contributors'
+            ).distinct()
+
+        # """Return only the Project where the user is a contributor."""
+        # user = self.request.user
+        # # Retrieves the projects where the user is the contributor.
+        # # return Project.objects.filter(contributors__user=user)
+        # return Project.objects.filter(
+        #     contributors__user=user
+        # ).select_related(
+        #     'author'
+        # ).prefetch_related(
+        #     'contributors'
+        # ).distinct()
 
     def perform_create(self, serializer):
         """Automatically set the author as the current user."""
