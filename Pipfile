@@ -9,7 +9,7 @@ djangorestframework = "*"
 pyjwt = "*"
 djangorestframework-simplejwt = "*"
 certifi = "==2026.7.22"
-python-dotenv = "==1.2.2"
+python-dotenv = "==1.2.3"
 
 [dev-packages]
 
